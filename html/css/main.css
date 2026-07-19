@@ -1,0 +1,386 @@
+:root {
+    --cyan: #00e5ff;
+    --violet: #7c5cff;
+    --hot: #ff2d55;
+    --ok: #41f0a0;
+    --text: #eaf6ff;
+    --muted: #9fb0c3;
+    --line: rgba(0, 229, 255, 0.45);
+    --panel: linear-gradient(
+        145deg,
+        rgba(8, 22, 40, 0.94) 0%,
+        rgba(6, 14, 28, 0.9) 55%,
+        rgba(4, 10, 20, 0.92) 100%
+    );
+    --accent: var(--cyan);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: transparent !important;
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    color: var(--text);
+}
+
+.template {
+    display: none !important;
+}
+
+/* Stack — top center */
+.notif-stack {
+    position: fixed;
+    top: 2.4vh;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(380px, 36vw);
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+.notification {
+    position: relative;
+    display: none;
+    width: 100%;
+    padding: 12px 14px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    background: var(--panel);
+    color: var(--text);
+    box-shadow:
+        0 0 0 1px rgba(0, 229, 255, 0.1),
+        0 0 22px rgba(0, 229, 255, 0.16),
+        0 10px 28px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+    animation: notifIn 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes notifIn {
+    from {
+        opacity: 0;
+        transform: translateY(-14px) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.notification.leaving {
+    animation: notifOut 0.3s ease-in forwards;
+}
+
+@keyframes notifOut {
+    to {
+        opacity: 0;
+        transform: translateY(-12px) scale(0.96);
+    }
+}
+
+/* Accent edge by type */
+.notification::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    bottom: 8px;
+    width: 3px;
+    border-radius: 0 3px 3px 0;
+    background: var(--accent);
+    box-shadow: 0 0 10px var(--accent);
+}
+
+.notification .edge {
+    position: absolute;
+    left: 14px;
+    right: 14px;
+    height: 1px;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(0, 229, 255, 0.5) 20%,
+        rgba(124, 92, 255, 0.5) 80%,
+        transparent 100%
+    );
+    pointer-events: none;
+}
+
+.notification .edge-top { top: 0; }
+.notification .edge-bottom { bottom: 0; opacity: 0.5; }
+
+.notif-inner {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    position: relative;
+    z-index: 1;
+}
+
+.notif-icon {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    color: var(--accent);
+    background: rgba(0, 229, 255, 0.08);
+    border: 1px solid rgba(0, 229, 255, 0.28);
+    box-shadow: 0 0 14px rgba(0, 229, 255, 0.18);
+}
+
+.notif-icon i {
+    font-size: 15px;
+    line-height: 1;
+}
+
+.notif-body {
+    flex: 1;
+    min-width: 0;
+    padding-top: 1px;
+}
+
+.notif-title {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-shadow: 0 0 10px color-mix(in srgb, var(--accent) 50%, transparent);
+    margin-bottom: 3px;
+}
+
+.notif-text {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: var(--text);
+    word-wrap: break-word;
+}
+
+/* Progress bar */
+.progress-bar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background: rgba(0, 20, 40, 0.55);
+    overflow: hidden;
+}
+
+.progress-bar .progress {
+    height: 100%;
+    width: 100%;
+    transform-origin: left center;
+    background: linear-gradient(90deg, var(--cyan), var(--violet));
+    box-shadow: 0 0 8px rgba(0, 229, 255, 0.65);
+    animation: progressShrink linear forwards;
+}
+
+@keyframes progressShrink {
+    from { transform: scaleX(1); }
+    to { transform: scaleX(0); }
+}
+
+/* —— Type accents (shared futuristic panel, colored accent) —— */
+.notification.success,
+.notification.primary,
+.notification.info,
+.notification.error,
+.notification.garage,
+.notification.cardealer,
+.notification.tow,
+.notification.paint,
+.notification.carwash,
+.notification.weather,
+.notification.time,
+.notification.gps,
+.notification.map,
+.notification.fuel,
+.notification.admin,
+.notification.dispatch,
+.notification.emergency,
+.notification.police,
+.notification.bank,
+.notification.shop,
+.notification.house,
+.notification.phone,
+.notification.status,
+.notification.depot,
+.notification.bike,
+.notification.food,
+.notification.item,
+.notification.outfit,
+.notification.judge,
+.notification.gun,
+.notification.pawnshop,
+.notification.blackmarket,
+.notification.twitter,
+.notification.post,
+.notification.keys,
+.notification.card,
+.notification.prop,
+.notification.view,
+.notification.elevator,
+.notification.stash,
+.notification.toilet,
+.notification.car {
+    background: var(--panel);
+    color: var(--text);
+    border: 1px solid var(--line);
+    padding: 12px 14px 14px;
+    border-radius: 12px;
+    box-shadow:
+        0 0 0 1px rgba(0, 229, 255, 0.1),
+        0 0 22px rgba(0, 229, 255, 0.16),
+        0 10px 28px rgba(0, 0, 0, 0.4);
+    text-shadow: none;
+    margin: 0;
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    font-size: 13px;
+}
+
+.notification.success { --accent: var(--ok); }
+.notification.error,
+.notification.admin,
+.notification.emergency { --accent: var(--hot); }
+.notification.primary,
+.notification.info { --accent: var(--cyan); }
+.notification.garage,
+.notification.cardealer,
+.notification.car,
+.notification.bike { --accent: var(--cyan); }
+.notification.tow,
+.notification.paint { --accent: #7c5cff; }
+.notification.carwash,
+.notification.fuel { --accent: #00b4d8; }
+.notification.weather { --accent: #7c5cff; }
+.notification.time { --accent: #a78bfa; }
+.notification.gps,
+.notification.map { --accent: #00e5ff; }
+.notification.dispatch,
+.notification.police { --accent: #3b82f6; }
+.notification.bank { --accent: #41f0a0; }
+.notification.shop,
+.notification.item { --accent: #fbbf24; }
+.notification.house { --accent: #f97316; }
+.notification.phone { --accent: #22d3ee; }
+.notification.status { --accent: var(--hot); }
+.notification.depot { --accent: #f59e0b; }
+.notification.judge { --accent: #c084fc; }
+.notification.gun,
+.notification.blackmarket,
+.notification.pawnshop { --accent: #94a3b8; }
+.notification.twitter,
+.notification.post { --accent: #38bdf8; }
+.notification.keys,
+.notification.card { --accent: #60a5fa; }
+.notification.prop,
+.notification.view { --accent: #fbbf24; }
+.notification.elevator,
+.notification.stash { --accent: #818cf8; }
+.notification.food { --accent: #fb923c; }
+.notification.outfit { --accent: #e879f9; }
+.notification.toilet { --accent: #67e8f9; }
+
+/* Legacy bignotif structure still emitted by app.js */
+.bignotif-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: transparent;
+    width: 100%;
+    height: auto;
+}
+
+.bignotif-icon {
+    float: none;
+    padding: 0;
+    margin: 0;
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    color: var(--accent);
+    background: rgba(0, 229, 255, 0.08);
+    border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+    box-shadow: 0 0 14px color-mix(in srgb, var(--accent) 25%, transparent);
+    flex-shrink: 0;
+}
+
+.bignotif-icon svg {
+    width: 18px;
+    height: 18px;
+    display: block;
+    color: var(--accent);
+    filter: drop-shadow(0 0 6px color-mix(in srgb, var(--accent) 55%, transparent));
+}
+
+.bignotif-icon i {
+    font-size: 15px;
+    color: var(--accent);
+    filter: drop-shadow(0 0 6px color-mix(in srgb, var(--accent) 55%, transparent));
+}
+
+.bignotif-message {
+    flex: 1;
+    min-width: 0;
+    padding: 0;
+    height: auto;
+}
+
+.bignotif-title {
+    font-size: 10px !important;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 3px;
+    text-shadow: 0 0 10px color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+.bignotif-text {
+    font-weight: 500;
+    font-size: 13px !important;
+    line-height: 1.4;
+    color: var(--text);
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.notification-icon {
+    font-size: 15px;
+    margin: 0;
+    float: none;
+    color: var(--accent);
+}
+
+.notification-text {
+    line-height: 1.4;
+    color: var(--text);
+}
+
+.alert-detail {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}

@@ -1,0 +1,143 @@
+window.addEventListener('message', function (event) {
+    ShowNotif(event.data);
+});
+
+function ShowNotif(data) {
+    var $notification = $('.notification.template').clone();
+    var Text = '  ' + data.text;
+    var Icon = '';
+    var ProgressBar = '<div class="progress-bar"></div>'; // Add progress bar HTML
+
+    switch (data.type) {
+        case 'success':
+            Icon = '<i class="fas fa-check-circle"></i>';
+            $notification.addClass('success');
+            break;
+        case 'elevator':
+            Icon = '<i class="fa-sharp fa-light fa-elevator" style="color: #0000ff;"></i>';
+            $notification.addClass('elevator');
+            break;
+        case 'primary':
+            Icon = '<i class="fas fa-info-circle"></i>';
+            $notification.addClass('primary');
+            break;
+        case 'error':
+            Icon = '<i class="fas fa-exclamation-triangle"></i>';
+            $notification.addClass('error');
+            break;
+        case 'info':
+            Icon = '<i class="fas fa-exclamation-circle"></i>';
+            $notification.addClass('info');
+            break;
+        case 'toilet':
+            Icon = '<i class="fa-light fa-toilet"></i>';
+            $notification.addClass('toilet');
+            break;
+        case 'cardealer':
+            Icon = '<i class="fas fa-car"></i>';
+            $notification.addClass('cardealer');
+            break;
+        case 'garage':
+            Icon = '<i class="fas fa-warehouse"></i>';
+            $notification.addClass('garage');
+            break;
+        case 'depot':
+            Icon = '<i class="fas fa-traffic-light"></i>';
+            $notification.addClass('depot');
+            break;
+        case 'admin':
+            Icon = '<i class="fas fa-exclamation-circle"></i>';
+            $notification.addClass('admin');
+            break;
+        case 'dispatch':
+            Icon = '<i class="fa-light fa-siren"></i>';
+            $notification.addClass('dispatch');
+            break;
+        case 'emergency':
+            Icon = '<i class="fas fa-first-aid"></i>';
+            $notification.addClass('emergency');
+            break;
+        case 'phone':
+            Icon = '<i class="fas fa-phone"></i>';
+            $notification.addClass('phone');
+            break;
+        case 'fuel':
+            Icon = '<i class="fas fa-gas-pump"></i>';
+            $notification.addClass('fuel');
+            break;
+        case 'bike':
+            Icon = '<i class="fas fa-bicycle"></i>';
+            $notification.addClass('bike');
+            break;
+        case 'status':
+            Icon = '<i class="fas fa-heartbeat"></i>';
+            $notification.addClass('status');
+            break;
+        case 'house':
+            Icon = '<i class="fas fa-home"></i>';
+            $notification.addClass('house');
+            break;
+        case 'judge':
+            Icon = '<i class="fas fa-gavel"></i>';
+            $notification.addClass('judge');
+            break;
+        case 'tow':
+        case 'carwash':
+            Icon = '<i class="fas fa-tint"></i>';
+            $notification.addClass(data.type);
+            break;
+        case 'pawnshop':
+            Icon = '<i class="fas fa-coins"></i>';
+            $notification.addClass('pawnshop');
+            break;
+        case 'paint':
+            Icon = '<i class="fas fa-paint-brush"></i>';
+            $notification.addClass('paint');
+            break;
+        case 'post':
+            Icon = '<i class="fas fa-envelope"></i>';
+            $notification.addClass('post');
+            break;
+        case 'twitter':
+            Icon = '<i class="fab fa-twitter"></i>';
+            $notification.addClass('twitter');
+            break;
+        case 'bank':
+            Icon = '<i class="fas fa-university"></i>';
+            $notification.addClass('bank');
+            break;
+        case 'keys':
+            Icon = '<i class="fas fa-key"></i>';
+            $notification.addClass('keys');
+            break;
+        case 'card':
+            Icon = '<i class="fas fa-credit-card"></i>';
+            $notification.addClass('card');
+            break;
+        case 'gun':
+            Icon = '<i class="fas fa-gun"></i>';
+            $notification.addClass('gun');
+            break;
+        case 'blackmarket':
+            Icon = '<i class="fas fa-skull-crossbones"></i>';
+            $notification.addClass('blackmarket');
+            break;
+        default:
+            Icon = '<i class="fas fa-bell"></i>';
+            $notification.addClass('default');
+            break;
+    }
+
+    // Add HTML structure for notification
+    $notification.append('<div class="bignotif-container"><div class="bignotif-icon">' + Icon + '</div><div class="bignotif-message"><div class="bignotif-title">' + (data.type.charAt(0).toUpperCase() + data.type.slice(1)) + '</div><div class="bignotif-text"> ' + Text + ' </div></div>' + ProgressBar + '</div>');
+
+    // Append to body, show, and animate progress bar
+    $notification.removeClass('template').appendTo('body').slideDown(400);
+    $('.progress-bar').each(function() {
+        $(this).animate({ width: '100%' }, 3000, function() {
+            $(this).closest('.notification').slideUp(400, function () {
+                $(this).remove();
+            });
+        });
+    });
+}
